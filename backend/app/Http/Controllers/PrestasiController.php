@@ -73,6 +73,7 @@ class PrestasiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:150',
+            'type' => 'required|in:individu,kelompok',
             'student_name' => 'required|string|max:150',
             'class_name' => 'nullable|string|max:50',
             'achievement_level' => 'nullable|string|max:100',
@@ -128,6 +129,7 @@ class PrestasiController extends Controller
 
         $prestasi = Prestasi::create([
             'title' => $request->title,
+            'type' => $request->type,
             'student_name' => $request->student_name,
             'class_name' => $request->class_name,
             'achievement_level' => $request->achievement_level,
@@ -164,6 +166,7 @@ class PrestasiController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:150',
+            'type' => 'required|in:individu,kelompok',
             'student_name' => 'required|string|max:150',
             'class_name' => 'nullable|string|max:50',
             'achievement_level' => 'nullable|string|max:100',
@@ -291,6 +294,30 @@ class PrestasiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Prestasi ditolak',
+            'data' => $prestasi
+        ], 200);
+    }
+
+    public function revise(Request $request, $id)
+    {
+        $prestasi = Prestasi::find($id);
+        if (!$prestasi) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Prestasi tidak ditemukan'
+            ], 404);
+        }
+
+        $prestasi->update([
+            'status' => 'revised',
+            'verified_by' => auth()->id(),
+            'verified_at' => Carbon::now(),
+            'rejection_message' => $request->rejection_message
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Prestasi diminta revisi',
             'data' => $prestasi
         ], 200);
     }

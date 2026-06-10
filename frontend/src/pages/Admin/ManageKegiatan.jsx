@@ -119,6 +119,66 @@ const ManageKegiatan = () => {
         }
     };
 
+    if (show) {
+        return (
+            <div>
+                <PageHeader>
+                    <div>
+                        <h3 className="fw-bold text-dark m-0">{formData.id ? 'Edit Kegiatan' : 'Tambah Kegiatan Baru'}</h3>
+                        <p className="text-muted m-0">Silakan isi formulir di bawah ini dengan lengkap.</p>
+                    </div>
+                </PageHeader>
+
+                <Card className="border-0 shadow-sm rounded-4 p-4">
+                    <Form onSubmit={handleSubmit}>
+                        <Row>
+                            <Col md={12} className="mb-3">
+                                <Form.Group>
+                                    <Form.Label className="fw-semibold">Judul Kegiatan <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6} className="mb-3">
+                                <Form.Group>
+                                    <Form.Label className="fw-semibold">Tanggal Kegiatan <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6} className="mb-3">
+                                <Form.Group>
+                                    <Form.Label className="fw-semibold">Kategori <span className="text-danger">*</span></Form.Label>
+                                    <Form.Select required value={formData.categories_id} onChange={e => setFormData({...formData, categories_id: e.target.value})}>
+                                        <option value="">Pilih Kategori</option>
+                                        {categories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={12} className="mb-3">
+                                <Form.Group>
+                                    <Form.Label className="fw-semibold">Foto Kegiatan {!formData.id && <span className="text-danger">*</span>}</Form.Label>
+                                    <Form.Control type="file" required={!formData.id} accept="image/*" onChange={e => setFormData({...formData, image: e.target.files[0]})} />
+                                    <Form.Text className="text-muted">Maksimal 2MB.</Form.Text>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Form.Group className="mb-4">
+                            <Form.Label className="fw-semibold">Deskripsi / Konten <span className="text-danger">*</span></Form.Label>
+                            <Form.Control as="textarea" rows={5} required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                        </Form.Group>
+                        <div className="d-flex justify-content-end gap-2">
+                            <Button variant="light" onClick={handleClose}>Batal</Button>
+                            <Button variant="primary" type="submit" style={{ backgroundColor: '#1e3a8a', border: 'none', borderRadius: '8px', padding: '0.6rem 1.5rem' }}>
+                                {formData.id ? 'Simpan Perubahan' : 'Tambah Data'}
+                            </Button>
+                        </div>
+                    </Form>
+                </Card>
+            </div>
+        );
+    }
+
     return (
         <div>
             <PageHeader>
@@ -169,58 +229,6 @@ const ManageKegiatan = () => {
                     </tbody>
                 </StyledTable>
             </Card>
-
-            <Modal show={show} onHide={handleClose} size="lg" centered>
-                <Form onSubmit={handleSubmit}>
-                    <Modal.Header closeButton className="border-0 px-4 pt-4">
-                        <Modal.Title className="fw-bold">{formData.id ? 'Edit Kegiatan' : 'Tambah Kegiatan Baru'}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="px-4 pb-4">
-                        <Row>
-                            <Col md={12} className="mb-3">
-                                <Form.Group>
-                                    <Form.Label className="fw-semibold">Judul Kegiatan <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                                </Form.Group>
-                            </Col>
-                            <Col md={6} className="mb-3">
-                                <Form.Group>
-                                    <Form.Label className="fw-semibold">Tanggal Kegiatan <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
-                                </Form.Group>
-                            </Col>
-                            <Col md={6} className="mb-3">
-                                <Form.Group>
-                                    <Form.Label className="fw-semibold">Kategori <span className="text-danger">*</span></Form.Label>
-                                    <Form.Select required value={formData.categories_id} onChange={e => setFormData({...formData, categories_id: e.target.value})}>
-                                        <option value="">Pilih Kategori</option>
-                                        {categories.map(cat => (
-                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                        ))}
-                                    </Form.Select>
-                                </Form.Group>
-                            </Col>
-                            <Col md={12} className="mb-3">
-                                <Form.Group>
-                                    <Form.Label className="fw-semibold">Foto Kegiatan {!formData.id && <span className="text-danger">*</span>}</Form.Label>
-                                    <Form.Control type="file" required={!formData.id} accept="image/*" onChange={e => setFormData({...formData, image: e.target.files[0]})} />
-                                    <Form.Text className="text-muted">Maksimal 2MB.</Form.Text>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Form.Group className="mb-3">
-                            <Form.Label className="fw-semibold">Deskripsi / Konten <span className="text-danger">*</span></Form.Label>
-                            <Form.Control as="textarea" rows={5} required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer className="border-0 px-4 pb-4">
-                        <Button variant="light" onClick={handleClose}>Batal</Button>
-                        <Button variant="primary" type="submit" style={{ backgroundColor: '#1e3a8a', border: 'none' }}>
-                            {formData.id ? 'Simpan Perubahan' : 'Tambah Data'}
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
         </div>
     );
 };

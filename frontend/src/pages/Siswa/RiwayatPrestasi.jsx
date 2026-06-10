@@ -22,6 +22,7 @@ const RiwayatPrestasi = () => {
     const [formData, setFormData] = useState({
         id: null,
         title: '',
+        type: 'individu',
         student_name: '',
         class_name: '',
         achievement_level: '',
@@ -125,8 +126,174 @@ const RiwayatPrestasi = () => {
     const renderStatus = (status) => {
         if(status === 'approved') return <Badge bg="success" className="rounded-pill px-3 py-2">Disetujui</Badge>;
         if(status === 'rejected') return <Badge bg="danger" className="rounded-pill px-3 py-2">Ditolak</Badge>;
+        if(status === 'revised') return <Badge bg="warning" text="dark" className="rounded-pill px-3 py-2">Revisi</Badge>;
         return <OrangeBadge>Pending</OrangeBadge>;
     };
+
+    if (showEdit) {
+        return (
+            <div className="pb-5">
+                <h3 className="fw-bold mb-4 text-dark">Edit & Ajukan Kembali Prestasi</h3>
+
+                <div className="bg-white rounded-4 shadow-sm p-4">
+                    <Form onSubmit={handleSubmitEdit}>
+                        {formData.rejection_message && (
+                            <CommentBox className="mt-0 mb-4">
+                                <i className="bi bi-info-circle-fill"></i>
+                                <div>
+                                    <div className="fw-bold mb-1">{formData.status === 'rejected' ? 'Alasan Penolakan Sebelumnya:' : 'Masukan Revisi:'}</div>
+                                    {formData.rejection_message}
+                                </div>
+                            </CommentBox>
+                        )}
+                        <Row className="g-3">
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">JUDUL PRESTASI <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">TIPE PRESTASI <span className="text-danger">*</span></Form.Label>
+                                    <Form.Select required value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                                        <option value="individu">Individu (Perorangan)</option>
+                                        <option value="kelompok">Kelompok (Tim)</option>
+                                    </Form.Select>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">
+                                        {formData.type === 'kelompok' ? 'NAMA ANGGOTA KELOMPOK' : 'NAMA SISWA'} <span className="text-danger">*</span>
+                                    </Form.Label>
+                                    <Form.Control type="text" required placeholder={formData.type === 'kelompok' ? 'Nama-nama anggota (pisahkan dengan koma)' : 'Nama lengkap siswa'} value={formData.student_name} onChange={e => setFormData({...formData, student_name: e.target.value})} />
+                                    {formData.type === 'kelompok' && (
+                                        <Form.Text className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            *Pisahkan dengan koma. Contoh: Hisyam, Ahmad, Budi
+                                        </Form.Text>
+                                    )}
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">
+                                        {formData.type === 'kelompok' ? 'KELAS ANGGOTA' : 'KELAS'} <span className="text-danger">*</span>
+                                    </Form.Label>
+                                    <Form.Control type="text" required placeholder={formData.type === 'kelompok' ? 'Contoh: XI MIPA 2, XI MIPA 1' : 'Contoh: XI MIPA 2'} value={formData.class_name} onChange={e => setFormData({...formData, class_name: e.target.value})} />
+                                    {formData.type === 'kelompok' && (
+                                        <Form.Text className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            *Isi kelas semua anggota. Contoh: XI MIPA 2, XI MIPA 1
+                                        </Form.Text>
+                                    )}
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">TINGKAT <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control type="text" required value={formData.achievement_level} onChange={e => setFormData({...formData, achievement_level: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">TANGGAL <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">LOKASI <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control type="text" required value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold small text-muted">KATEGORI <span className="text-danger">*</span></Form.Label>
+                                    <Form.Select required value={formData.categories_id} onChange={e => setFormData({...formData, categories_id: e.target.value})}>
+                                        <option value="">Pilih Kategori</option>
+                                        {categories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={12}>
+                                <Form.Label className="fw-bold small text-muted mb-2">FOTO DOKUMENTASI (MAKSIMAL 3) <span className="text-danger">*</span></Form.Label>
+                                <Row className="g-2 mb-4">
+                                    <Col md={4}>
+                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, image: e.target.files[0]})} />
+                                        <ImagePreview>
+                                            {formData.image ? (
+                                                <>
+                                                    <img src={URL.createObjectURL(formData.image)} alt="P1" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('image')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : (formData.old_image ? (
+                                                <>
+                                                    <img src={`http://localhost:8000/storage/${formData.old_image}`} alt="O1" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : <i className="bi bi-image"></i>)}
+                                        </ImagePreview>
+                                    </Col>
+                                    <Col md={4}>
+                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, image2: e.target.files[0]})} />
+                                        <ImagePreview>
+                                            {formData.image2 ? (
+                                                <>
+                                                    <img src={URL.createObjectURL(formData.image2)} alt="P2" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('image2')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : (formData.old_image2 ? (
+                                                <>
+                                                    <img src={`http://localhost:8000/storage/${formData.old_image2}`} alt="O2" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image2')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : <i className="bi bi-image"></i>)}
+                                        </ImagePreview>
+                                    </Col>
+                                    <Col md={4}>
+                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, image3: e.target.files[0]})} />
+                                        <ImagePreview>
+                                            {formData.image3 ? (
+                                                <>
+                                                    <img src={URL.createObjectURL(formData.image3)} alt="P3" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('image3')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : (formData.old_image3 ? (
+                                                <>
+                                                    <img src={`http://localhost:8000/storage/${formData.old_image3}`} alt="O3" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image3')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : <i className="bi bi-image"></i>)}
+                                        </ImagePreview>
+                                    </Col>
+                                </Row>
+
+                                <Form.Label className="fw-bold small text-muted mb-2">BUKTI PRESTASI / SERTIFIKAT <span className="text-danger">*</span></Form.Label>
+                                <Row className="g-2">
+                                    <Col md={4}>
+                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, certificate: e.target.files[0]})} />
+                                        <ImagePreview>
+                                            {formData.certificate ? (
+                                                <>
+                                                    <img src={URL.createObjectURL(formData.certificate)} alt="Cert" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('certificate')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : (formData.old_certificate ? (
+                                                <>
+                                                    <img src={`http://localhost:8000/storage/${formData.old_certificate}`} alt="OC" />
+                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_certificate')}><i className="bi bi-x"></i></RemoveButton>
+                                                </>
+                                            ) : <i className="bi bi-file-earmark-check"></i>)}
+                                        </ImagePreview>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col md={12}>
+                                <Form.Group className="mt-3">
+                                    <Form.Label className="fw-bold small text-muted">DESKRIPSI PERBAIKAN <span className="text-danger">*</span></Form.Label>
+                                    <Form.Control as="textarea" rows={3} required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <div className="d-flex justify-content-end gap-2 mt-4">
+                            <Button variant="light" className="fw-bold px-4" onClick={handleClose}>Batal</Button>
+                            <Button variant="primary" type="submit" className="fw-bold px-4" style={{ backgroundColor: '#f97316', border: 'none', borderRadius: '8px' }}>Ajukan Kembali</Button>
+                        </div>
+                    </Form>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="pb-5">
@@ -138,6 +305,7 @@ const RiwayatPrestasi = () => {
                         <tr>
                             <th>Tanggal Diajukan</th>
                             <th>Judul Prestasi</th>
+                            <th className="text-center-col">Tipe</th>
                             <th className="text-center-col">Kategori</th>
                             <th className="text-center-col">Status</th>
                             <th className="text-center-col">Aksi</th>
@@ -145,13 +313,20 @@ const RiwayatPrestasi = () => {
                     </thead>
                     <tbody>
                         {loading ? (
-                            <tr><td colSpan="5" className="text-center py-5">Memuat riwayat...</td></tr>
+                            <tr><td colSpan="6" className="text-center py-5">Memuat riwayat...</td></tr>
                         ) : prestasi.length === 0 ? (
-                            <tr><td colSpan="5" className="text-center py-5 text-muted">Belum ada riwayat prestasi.</td></tr>
+                            <tr><td colSpan="6" className="text-center py-5 text-muted">Belum ada riwayat prestasi.</td></tr>
                         ) : prestasi.map(item => (
                             <tr key={item.id}>
                                 <td>{new Date(item.created_at).toLocaleDateString('id-ID')}</td>
                                 <td>{item.title}</td>
+                                <td className="text-center-col">
+                                    {item.type === 'kelompok' ? (
+                                        <Badge bg="info" className="rounded-pill px-3 py-2 text-capitalize" style={{ fontSize: '0.75rem' }}>Kelompok</Badge>
+                                    ) : (
+                                        <Badge bg="secondary" className="rounded-pill px-3 py-2 text-capitalize" style={{ fontSize: '0.75rem' }}>Individu</Badge>
+                                    )}
+                                </td>
                                 <td className="text-center-col">
                                     <Badge bg="secondary" className="rounded-pill px-3 py-2 text-capitalize">
                                         {item.category?.name}
@@ -161,7 +336,7 @@ const RiwayatPrestasi = () => {
                                 <td className="text-center-col">
                                     <div className="d-flex justify-content-center gap-2">
                                         <Button variant="outline-primary" size="sm" className="rounded-3" onClick={() => handleShowDetail(item)}>Detail</Button>
-                                        {item.status === 'rejected' && (
+                                        {(item.status === 'rejected' || item.status === 'revised') && (
                                             <Button variant="warning" size="sm" className="rounded-3 text-white fw-bold" onClick={() => handleShowEdit(item)}>Edit & Ajukan Lagi</Button>
                                         )}
                                     </div>
@@ -182,9 +357,19 @@ const RiwayatPrestasi = () => {
                         <>
                             <Row className="g-4">
                                 <Col md={6}>
-                                    <div className="mb-3">
-                                        <small className="text-muted fw-bold d-block mb-1">STATUS</small>
-                                        {renderStatus(selectedItem.status)}
+                                    <div className="mb-3 d-flex gap-2">
+                                        <div>
+                                            <small className="text-muted fw-bold d-block mb-1">STATUS</small>
+                                            {renderStatus(selectedItem.status)}
+                                        </div>
+                                        <div>
+                                            <small className="text-muted fw-bold d-block mb-1">TIPE</small>
+                                            {selectedItem.type === 'kelompok' ? (
+                                                <Badge bg="info" className="rounded-pill px-3 py-2 text-capitalize" style={{ fontSize: '0.75rem' }}>Kelompok</Badge>
+                                            ) : (
+                                                <Badge bg="secondary" className="rounded-pill px-3 py-2 text-capitalize" style={{ fontSize: '0.75rem' }}>Individu</Badge>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="mb-3">
                                         <small className="text-muted fw-bold d-block mb-1">JUDUL</small>
@@ -225,11 +410,11 @@ const RiwayatPrestasi = () => {
                                 </Col>
                             </Row>
                             
-                            {selectedItem.status === 'rejected' && selectedItem.rejection_message && (
+                            {(selectedItem.status === 'rejected' || selectedItem.status === 'revised') && selectedItem.rejection_message && (
                                 <CommentBox>
                                     <i className="bi bi-info-circle-fill"></i>
                                     <div>
-                                        <div className="fw-bold mb-1">Catatan dari Guru:</div>
+                                        <div className="fw-bold mb-1">{selectedItem.status === 'rejected' ? 'Catatan Penolakan:' : 'Catatan Revisi:'}</div>
                                         {selectedItem.rejection_message}
                                     </div>
                                 </CommentBox>
@@ -240,144 +425,6 @@ const RiwayatPrestasi = () => {
                 <Modal.Footer className="border-0 px-4 pb-4">
                     <Button variant="light" className="fw-bold px-4" onClick={handleClose}>Tutup</Button>
                 </Modal.Footer>
-            </Modal>
-
-            {/* Edit Modal */}
-            <Modal show={showEdit} onHide={handleClose} size="lg" centered className="rounded-4">
-                <Form onSubmit={handleSubmitEdit}>
-                    <Modal.Header closeButton className="border-0 px-4 pt-4">
-                        <Modal.Title className="fw-bold text-danger">Edit & Ajukan Kembali</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="px-4 pb-4">
-                        {formData.rejection_message && (
-                            <CommentBox className="mt-0 mb-4">
-                                <i className="bi bi-info-circle-fill"></i>
-                                <div>
-                                    <div className="fw-bold mb-1">Alasan Penolakan Sebelumnya:</div>
-                                    {formData.rejection_message}
-                                </div>
-                            </CommentBox>
-                        )}
-                        <Row className="g-3">
-                            <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">JUDUL PRESTASI <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">NAMA SISWA <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.student_name} onChange={e => setFormData({...formData, student_name: e.target.value})} />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">KELAS <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.class_name} onChange={e => setFormData({...formData, class_name: e.target.value})} />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">TINGKAT <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.achievement_level} onChange={e => setFormData({...formData, achievement_level: e.target.value})} />
-                                </Form.Group>
-                            </Col>
-                            <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">TANGGAL <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">LOKASI <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="fw-bold small text-muted">KATEGORI <span className="text-danger">*</span></Form.Label>
-                                    <Form.Select required value={formData.categories_id} onChange={e => setFormData({...formData, categories_id: e.target.value})}>
-                                        <option value="">Pilih Kategori</option>
-                                        {categories.map(cat => (
-                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                        ))}
-                                    </Form.Select>
-                                </Form.Group>
-                            </Col>
-                            <Col md={12}>
-                                <Form.Label className="fw-bold small text-muted">LAMPIRAN (DOKUMENTASI & BUKTI) <span className="text-danger">*</span></Form.Label>
-                                <Row className="g-2">
-                                    <Col md={3}>
-                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, image: e.target.files[0]})} />
-                                        <ImagePreview>
-                                            {formData.image ? (
-                                                <>
-                                                    <img src={URL.createObjectURL(formData.image)} alt="P1" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('image')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : (formData.old_image ? (
-                                                <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_image}`} alt="O1" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : <i className="bi bi-image"></i>)}
-                                        </ImagePreview>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, image2: e.target.files[0]})} />
-                                        <ImagePreview>
-                                            {formData.image2 ? (
-                                                <>
-                                                    <img src={URL.createObjectURL(formData.image2)} alt="P2" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('image2')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : (formData.old_image2 ? (
-                                                <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_image2}`} alt="O2" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image2')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : <i className="bi bi-image"></i>)}
-                                        </ImagePreview>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, image3: e.target.files[0]})} />
-                                        <ImagePreview>
-                                            {formData.image3 ? (
-                                                <>
-                                                    <img src={URL.createObjectURL(formData.image3)} alt="P3" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('image3')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : (formData.old_image3 ? (
-                                                <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_image3}`} alt="O3" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image3')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : <i className="bi bi-image"></i>)}
-                                        </ImagePreview>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Form.Control type="file" size="sm" accept="image/*" onChange={e => setFormData({...formData, certificate: e.target.files[0]})} />
-                                        <ImagePreview>
-                                            {formData.certificate ? (
-                                                <>
-                                                    <img src={URL.createObjectURL(formData.certificate)} alt="Cert" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveImage('certificate')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : (formData.old_certificate ? (
-                                                <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_certificate}`} alt="OC" />
-                                                    <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_certificate')}><i className="bi bi-x"></i></RemoveButton>
-                                                </>
-                                            ) : <i className="bi bi-file-earmark-check"></i>)}
-                                        </ImagePreview>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col md={12}>
-                                <Form.Group className="mt-3">
-                                    <Form.Label className="fw-bold small text-muted">DESKRIPSI PERBAIKAN <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control as="textarea" rows={3} required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                    </Modal.Body>
-                    <Modal.Footer className="border-0 px-4 pb-4">
-                        <Button variant="light" className="fw-bold px-4" onClick={handleClose}>Batal</Button>
-                        <Button variant="primary" type="submit" className="fw-bold px-4" style={{ backgroundColor: '#f97316', border: 'none' }}>Ajukan Kembali</Button>
-                    </Modal.Footer>
-                </Form>
             </Modal>
         </div>
     );

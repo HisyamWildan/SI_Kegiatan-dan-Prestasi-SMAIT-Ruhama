@@ -106,16 +106,12 @@ const LandingPage = () => {
                 <p className="about-description">
                   Kami berdedikasi untuk mencetak generasi pemimpin masa depan yang berprestasi secara akademik, memiliki karakter Qur'ani yang kuat, serta berwawasan global yang siap menghadapi tantangan zaman.
                 </p>
-                <div className="d-flex gap-3">
-                   <div className="text-center p-3 rounded-4 bg-white shadow-sm border" style={{ minWidth: '100px' }}>
-                      <h4 className="fw-bold mb-0 text-primary">A</h4>
-                      <small className="text-muted">Akreditasi</small>
-                   </div>
-                   <div className="text-center p-3 rounded-4 bg-white shadow-sm border" style={{ minWidth: '100px' }}>
-                      <h4 className="fw-bold mb-0 text-primary">100%</h4>
-                      <small className="text-muted">Lulus</small>
-                   </div>
-                </div>
+                 <div className="d-flex">
+                    <div className="text-center p-3 rounded-4 bg-white shadow-sm border" style={{ minWidth: '100px' }}>
+                       <h4 className="fw-bold mb-0 text-primary">100%</h4>
+                       <small className="text-muted">Lulus</small>
+                    </div>
+                 </div>
               </div>
               <div className="col-lg-6 order-1 order-lg-2">
                 <img
@@ -139,7 +135,7 @@ const LandingPage = () => {
             {loading ? (
               <div className="text-center py-5"><Spinner animation="border" variant="primary" /></div>
             ) : (
-              <GridContainer>
+              <GridContainer $count={kegiatan.length}>
                 {kegiatan.map((item) => (
                   <NewsCardWrapper key={item.id} onClick={() => navigate(`/kegiatan/${item.id}`)}>
                      <div className="image-box">
@@ -163,7 +159,7 @@ const LandingPage = () => {
             )}
             
             <div className="text-center">
-               <ViewAllButton style={{ background: 'transparent', color: 'white', borderColor: 'white' }} onClick={() => navigate('/kegiatan-sekolah')}>Lihat Seluruh Kegiatan</ViewAllButton>
+               <ViewAllButton onClick={() => navigate('/kegiatan-sekolah')}>Lihat Seluruh Kegiatan</ViewAllButton>
             </div>
           </Container>
         </Section>
@@ -179,7 +175,7 @@ const LandingPage = () => {
             {loading ? (
               <div className="text-center py-5"><Spinner animation="border" variant="primary" /></div>
             ) : (
-              <GridContainer>
+              <GridContainer $count={prestasi.length}>
                 {prestasi.map((item) => (
                   <NewsCardWrapper key={item.id} onClick={() => navigate(`/prestasi/${item.id}`)}>
                      <div className="image-box">

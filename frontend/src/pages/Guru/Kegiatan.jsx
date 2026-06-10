@@ -233,70 +233,18 @@ const KegiatanGuru = () => {
         }
     };
 
-    return (
-        <div className="pb-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h3 className="fw-bold text-dark m-0">Daftar Kegiatan</h3>
-                    <p className="text-muted small m-0">Kelola konten kegiatan yang telah Anda publikasikan.</p>
+    if (show) {
+        return (
+            <div className="pb-5">
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 className="fw-bold text-dark m-0">{formData.id ? 'Edit Data Kegiatan' : 'Tambah Data Kegiatan'}</h3>
+                        <p className="text-muted small m-0">Silakan isi formulir di bawah ini dengan lengkap.</p>
+                    </div>
                 </div>
-                <Button 
-                    className="rounded-3 px-4 fw-bold shadow-sm" 
-                    onClick={() => handleShow()}
-                    style={{ backgroundColor: '#f97316', border: 'none' }}
-                >
-                    <i className="bi bi-plus-lg me-2"></i> Tambah Kegiatan
-                </Button>
-            </div>
 
-            <div className="bg-white rounded-4 shadow-sm overflow-hidden">
-                <StyledTable responsive hover className="mb-0">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Judul Kegiatan</th>
-                            <th className="text-center">Kategori</th>
-                            <th>Lokasi</th>
-                            <th className="col-aksi">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr><td colSpan="5" className="text-center py-5">Memuat data...</td></tr>
-                        ) : kegiatan.length === 0 ? (
-                            <tr><td colSpan="5" className="text-center py-5 text-muted">Belum ada data kegiatan.</td></tr>
-                        ) : kegiatan.map(item => (
-                            <tr key={item.id}>
-                                <td>{new Date(item.date).toLocaleDateString('id-ID')}</td>
-                                <td>{item.title}</td>
-                                <td className="text-center">
-                                    <OrangeBadge className="text-capitalize">
-                                        {item.category?.name}
-                                    </OrangeBadge>
-                                </td>
-                                <td>{item.location}</td>
-                                <td className="col-aksi">
-                                    <div className="d-flex justify-content-center gap-2">
-                                        <ActionButton variant="outline-primary" onClick={() => handleShow(item)}>
-                                            <i className="bi bi-pencil-square"></i>
-                                        </ActionButton>
-                                        <ActionButton variant="outline-danger" onClick={() => handleDelete(item.id)}>
-                                            <i className="bi bi-trash"></i>
-                                        </ActionButton>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </StyledTable>
-            </div>
-
-            <Modal show={show} onHide={handleClose} size="lg" centered className="rounded-4">
-                <Form onSubmit={handleSubmit}>
-                    <Modal.Header closeButton className="border-0 px-4 pt-4">
-                        <Modal.Title className="fw-bold">{formData.id ? 'Edit Data Kegiatan' : 'Tambah Data Kegiatan'}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="px-4 pb-4">
+                <div className="bg-white rounded-4 shadow-sm p-4">
+                    <Form onSubmit={handleSubmit}>
                         <Row className="g-3">
                             <Col md={6}>
                                 <Form.Group className="mb-3">
@@ -382,13 +330,73 @@ const KegiatanGuru = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                    </Modal.Body>
-                    <Modal.Footer className="border-0 px-4 pb-4">
-                        <Button variant="light" className="px-4 fw-bold" onClick={handleClose}>Batal</Button>
-                        <Button variant="primary" type="submit" className="px-4 fw-bold" style={{ backgroundColor: '#f97316', border: 'none' }}>Simpan Kegiatan</Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
+                        <div className="d-flex justify-content-end gap-2 mt-3">
+                            <Button variant="light" className="px-4 fw-bold" onClick={handleClose}>Batal</Button>
+                            <Button variant="primary" type="submit" className="px-4 fw-bold" style={{ backgroundColor: '#f97316', border: 'none', borderRadius: '8px' }}>Simpan Kegiatan</Button>
+                        </div>
+                    </Form>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="pb-5">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 className="fw-bold text-dark m-0">Daftar Kegiatan</h3>
+                    <p className="text-muted small m-0">Kelola konten kegiatan yang telah Anda publikasikan.</p>
+                </div>
+                <Button 
+                    className="rounded-3 px-4 fw-bold shadow-sm" 
+                    onClick={() => handleShow()}
+                    style={{ backgroundColor: '#f97316', border: 'none' }}
+                >
+                    <i className="bi bi-plus-lg me-2"></i> Tambah Kegiatan
+                </Button>
+            </div>
+
+            <div className="bg-white rounded-4 shadow-sm overflow-hidden">
+                <StyledTable responsive hover className="mb-0">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Judul Kegiatan</th>
+                            <th className="text-center">Kategori</th>
+                            <th>Lokasi</th>
+                            <th className="col-aksi">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr><td colSpan="5" className="text-center py-5">Memuat data...</td></tr>
+                        ) : kegiatan.length === 0 ? (
+                            <tr><td colSpan="5" className="text-center py-5 text-muted">Belum ada data kegiatan.</td></tr>
+                        ) : kegiatan.map(item => (
+                            <tr key={item.id}>
+                                <td>{new Date(item.date).toLocaleDateString('id-ID')}</td>
+                                <td>{item.title}</td>
+                                <td className="text-center">
+                                    <OrangeBadge className="text-capitalize">
+                                        {item.category?.name}
+                                    </OrangeBadge>
+                                </td>
+                                <td>{item.location}</td>
+                                <td className="col-aksi">
+                                    <div className="d-flex justify-content-center gap-2">
+                                        <ActionButton variant="outline-primary" onClick={() => handleShow(item)}>
+                                            <i className="bi bi-pencil-square"></i>
+                                        </ActionButton>
+                                        <ActionButton variant="outline-danger" onClick={() => handleDelete(item.id)}>
+                                            <i className="bi bi-trash"></i>
+                                        </ActionButton>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </StyledTable>
+            </div>
         </div>
     );
 };

@@ -55,6 +55,7 @@ const ManagePrestasiAdmin = () => {
     const [formData, setFormData] = useState({
         id: null,
         title: '',
+        type: 'individu',
         student_name: '',
         class_name: '',
         achievement_level: '',
@@ -89,7 +90,7 @@ const ManagePrestasiAdmin = () => {
 
     const handleClose = () => {
         setShow(false);
-        setFormData({ id: null, title: '', student_name: '', class_name: '', achievement_level: '', date: '', location: '', description: '', categories_id: '', image: null, certificate: null });
+        setFormData({ id: null, title: '', type: 'individu', student_name: '', class_name: '', achievement_level: '', date: '', location: '', description: '', categories_id: '', image: null, certificate: null });
     };
 
     const handleShow = (item = null) => {
@@ -104,6 +105,7 @@ const ManagePrestasiAdmin = () => {
         try {
             const data = new FormData();
             data.append('title', formData.title);
+            data.append('type', formData.type);
             data.append('student_name', formData.student_name);
             data.append('class_name', formData.class_name);
             data.append('achievement_level', formData.achievement_level);
@@ -147,69 +149,22 @@ const ManagePrestasiAdmin = () => {
     const renderStatus = (status) => {
         if(status === 'approved') return <Badge bg="success" className="rounded-pill px-3 py-2">Disetujui</Badge>;
         if(status === 'rejected') return <Badge bg="danger" className="rounded-pill px-3 py-2">Ditolak</Badge>;
-        return <Badge bg="warning" text="dark" className="rounded-pill px-3 py-2">Pending</Badge>;
+        if(status === 'revised') return <Badge bg="warning" text="dark" className="rounded-pill px-3 py-2">Revisi</Badge>;
+        return <Badge className="rounded-pill px-3 py-2" style={{ backgroundColor: '#f97316', color: 'white' }}>Pending</Badge>;
     };
 
-    return (
-        <div>
-            <PageHeader>
-                <div>
-                    <h3 className="fw-bold text-dark m-0">Manajemen Prestasi</h3>
-                    <p className="text-muted m-0">Kelola data prestasi siswa secara keseluruhan.</p>
-                </div>
-                <Button 
-                    variant="primary" 
-                    className="shadow-sm d-flex align-items-center gap-2"
-                    style={{ backgroundColor: '#f97316', border: 'none', borderRadius: '10px', padding: '0.6rem 1.25rem' }} 
-                    onClick={() => handleShow()}
-                >
-                    <i className="bi bi-plus-lg"></i>
-                    Tambah Prestasi
-                </Button>
-            </PageHeader>
+    if (show) {
+        return (
+            <div>
+                <PageHeader>
+                    <div>
+                        <h3 className="fw-bold text-dark m-0">{formData.id ? 'Edit Data Prestasi' : 'Tambah Prestasi Baru'}</h3>
+                        <p className="text-muted m-0">Silakan isi formulir di bawah ini dengan lengkap.</p>
+                    </div>
+                </PageHeader>
 
-            <Card className="border-0 shadow-sm rounded-4 overflow-hidden">
-                <StyledTable responsive hover>
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Judul</th>
-                            <th>Nama Siswa</th>
-                            <th>Status</th>
-                            <th className="text-end">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr><td colSpan="5" className="text-center py-5 text-muted">Memuat data...</td></tr>
-                        ) : prestasi.length === 0 ? (
-                            <tr><td colSpan="5" className="text-center py-5 text-muted">Belum ada data prestasi.</td></tr>
-                        ) : prestasi.map(item => (
-                            <tr key={item.id}>
-                                <td className="fw-medium">{new Date(item.date).toLocaleDateString('id-ID')}</td>
-                                <td className="fw-bold">{item.title}</td>
-                                <td>{item.student_name}</td>
-                                <td>{renderStatus(item.status)}</td>
-                                <td className="text-end">
-                                    <ActionButton variant="outline-primary" size="sm" className="me-2" onClick={() => handleShow(item)}>
-                                        <i className="bi bi-pencil-square"></i>
-                                    </ActionButton>
-                                    <ActionButton variant="outline-danger" size="sm" onClick={() => handleDelete(item.id)}>
-                                        <i className="bi bi-trash"></i>
-                                    </ActionButton>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </StyledTable>
-            </Card>
-
-            <Modal show={show} onHide={handleClose} size="lg" centered className="rounded-4">
-                <Form onSubmit={handleSubmit}>
-                    <Modal.Header closeButton className="border-0 px-4 pt-4">
-                        <Modal.Title className="fw-bold">{formData.id ? 'Edit Data Prestasi' : 'Tambah Prestasi Baru'}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="px-4 pb-4">
+                <Card className="border-0 shadow-sm rounded-4 p-4">
+                    <Form onSubmit={handleSubmit}>
                         <Row>
                             <Col md={12} className="mb-3">
                                 <Form.Group>
@@ -217,16 +172,55 @@ const ManagePrestasiAdmin = () => {
                                     <Form.Control type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="Masukkan judul prestasi" />
                                 </Form.Group>
                             </Col>
-                            <Col md={6} className="mb-3">
+                            <Col md={12} className="mb-3">
                                 <Form.Group>
-                                    <Form.Label className="fw-semibold">Nama Siswa <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.student_name} onChange={e => setFormData({...formData, student_name: e.target.value})} />
+                                    <Form.Label className="fw-semibold">Tipe Prestasi <span className="text-danger">*</span></Form.Label>
+                                    <Form.Select 
+                                        required 
+                                        value={formData.type} 
+                                        onChange={e => setFormData({...formData, type: e.target.value})}
+                                    >
+                                        <option value="individu">Individu (Perorangan)</option>
+                                        <option value="kelompok">Kelompok (Tim)</option>
+                                    </Form.Select>
                                 </Form.Group>
                             </Col>
                             <Col md={6} className="mb-3">
                                 <Form.Group>
-                                    <Form.Label className="fw-semibold">Kelas <span className="text-danger">*</span></Form.Label>
-                                    <Form.Control type="text" required value={formData.class_name} onChange={e => setFormData({...formData, class_name: e.target.value})} />
+                                    <Form.Label className="fw-semibold">
+                                        {formData.type === 'kelompok' ? 'Nama Anggota Kelompok' : 'Nama Siswa'} <span className="text-danger">*</span>
+                                    </Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        required 
+                                        value={formData.student_name} 
+                                        onChange={e => setFormData({...formData, student_name: e.target.value})} 
+                                        placeholder={formData.type === 'kelompok' ? 'Nama-nama anggota (pisahkan dengan koma)' : 'Nama lengkap siswa'} 
+                                    />
+                                    {formData.type === 'kelompok' && (
+                                        <Form.Text className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            *Pisahkan dengan koma. Contoh: Hisyam, Ahmad, Budi
+                                        </Form.Text>
+                                    )}
+                                </Form.Group>
+                            </Col>
+                            <Col md={6} className="mb-3">
+                                <Form.Group>
+                                    <Form.Label className="fw-semibold">
+                                        {formData.type === 'kelompok' ? 'Kelas Anggota' : 'Kelas'} <span className="text-danger">*</span>
+                                    </Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        required 
+                                        value={formData.class_name} 
+                                        onChange={e => setFormData({...formData, class_name: e.target.value})} 
+                                        placeholder={formData.type === 'kelompok' ? 'Misal: XI MIPA 2, XI MIPA 1' : 'Contoh: XI MIPA 2'} 
+                                    />
+                                    {formData.type === 'kelompok' && (
+                                        <Form.Text className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            *Isi kelas semua anggota. Contoh: XI MIPA 2, XI MIPA 1
+                                        </Form.Text>
+                                    )}
                                 </Form.Group>
                             </Col>
                             <Col md={6} className="mb-3">
@@ -271,19 +265,83 @@ const ManagePrestasiAdmin = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Form.Group className="mb-3">
+                        <Form.Group className="mb-4">
                             <Form.Label className="fw-semibold">Deskripsi <span className="text-danger">*</span></Form.Label>
                             <Form.Control as="textarea" rows={3} required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
                         </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer className="border-0 px-4 pb-4">
-                        <Button variant="light" className="px-4" onClick={handleClose}>Batal</Button>
-                        <Button variant="primary" type="submit" className="px-4" style={{ backgroundColor: '#f97316', border: 'none' }}>
-                            {formData.id ? 'Simpan Perubahan' : 'Tambah Data'}
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
+                        <div className="d-flex justify-content-end gap-2">
+                            <Button variant="light" className="px-4" onClick={handleClose}>Batal</Button>
+                            <Button variant="primary" type="submit" className="px-4" style={{ backgroundColor: '#f97316', border: 'none', borderRadius: '8px' }}>
+                                {formData.id ? 'Simpan Perubahan' : 'Tambah Data'}
+                            </Button>
+                        </div>
+                    </Form>
+                </Card>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <PageHeader>
+                <div>
+                    <h3 className="fw-bold text-dark m-0">Manajemen Prestasi</h3>
+                    <p className="text-muted m-0">Kelola data prestasi siswa secara keseluruhan.</p>
+                </div>
+                <Button 
+                    variant="primary" 
+                    className="shadow-sm d-flex align-items-center gap-2"
+                    style={{ backgroundColor: '#f97316', border: 'none', borderRadius: '10px', padding: '0.6rem 1.25rem' }} 
+                    onClick={() => handleShow()}
+                >
+                    <i className="bi bi-plus-lg"></i>
+                    Tambah Prestasi
+                </Button>
+            </PageHeader>
+
+            <Card className="border-0 shadow-sm rounded-4 overflow-hidden">
+                <StyledTable responsive hover>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Judul</th>
+                            <th>Nama Siswa</th>
+                            <th>Tipe</th>
+                            <th>Status</th>
+                            <th className="text-end">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr><td colSpan="6" className="text-center py-5 text-muted">Memuat data...</td></tr>
+                        ) : prestasi.length === 0 ? (
+                            <tr><td colSpan="6" className="text-center py-5 text-muted">Belum ada data prestasi.</td></tr>
+                        ) : prestasi.map(item => (
+                            <tr key={item.id}>
+                                <td className="fw-medium">{new Date(item.date).toLocaleDateString('id-ID')}</td>
+                                <td className="fw-bold">{item.title}</td>
+                                <td>{item.student_name}</td>
+                                <td>
+                                    {item.type === 'kelompok' ? (
+                                        <Badge bg="info" className="rounded-pill px-3 py-2 text-capitalize" style={{ fontSize: '0.75rem' }}>Kelompok</Badge>
+                                    ) : (
+                                        <Badge bg="secondary" className="rounded-pill px-3 py-2 text-capitalize" style={{ fontSize: '0.75rem' }}>Individu</Badge>
+                                    )}
+                                </td>
+                                <td>{renderStatus(item.status)}</td>
+                                <td className="text-end">
+                                    <ActionButton variant="outline-primary" size="sm" className="me-2" onClick={() => handleShow(item)}>
+                                        <i className="bi bi-pencil-square"></i>
+                                    </ActionButton>
+                                    <ActionButton variant="outline-danger" size="sm" onClick={() => handleDelete(item.id)}>
+                                        <i className="bi bi-trash"></i>
+                                    </ActionButton>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </StyledTable>
+            </Card>
         </div>
     );
 };

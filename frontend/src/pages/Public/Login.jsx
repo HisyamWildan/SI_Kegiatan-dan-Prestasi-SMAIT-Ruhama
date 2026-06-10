@@ -11,13 +11,16 @@ import {
     AuthTitle, 
     PrimaryButton,
     FormLabel,
-    StyledInput
+    StyledInput,
+    PasswordInputContainer,
+    EyeIcon
 } from './Auth.styled';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [pageTransition, setPageTransition] = useState(false);
     const navigate = useNavigate();
@@ -108,14 +111,20 @@ const Login = () => {
 
                             <Form.Group className="mb-3">
                                 <FormLabel>Kata Sandi</FormLabel>
-                                <StyledInput 
-                                    type="password" 
-                                    name="password"
-                                    placeholder="••••••••"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required 
-                                />
+                                <PasswordInputContainer>
+                                    <StyledInput 
+                                        type={showPassword ? "text" : "password"} 
+                                        name="password"
+                                        placeholder="••••••••"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required 
+                                        style={{ paddingRight: '45px' }}
+                                    />
+                                    <EyeIcon onClick={() => setShowPassword(!showPassword)}>
+                                        <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+                                    </EyeIcon>
+                                </PasswordInputContainer>
                             </Form.Group>
 
                             <PrimaryButton type="submit" disabled={loading}>

@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Container from "../../components/ui/Container";
 import { SectionTitle } from "./LandingPage.styled";
-import { PageWrapper, HeroSection, ContentSection, CardWrapper, AboutImage, TextContent, ListWrapper, ContactSection } from './TentangKami.styled';
+import { PageWrapper, HeroSection, ContentSection, CardWrapper, AboutImage, TextContent, ListWrapper, OrderedListWrapper, ContactSection } from './TentangKami.styled';
 
 const TentangKami = () => {
   return (
@@ -21,21 +21,23 @@ const TentangKami = () => {
             <CardWrapper>
                <div className="row g-0">
                  <div className="col-lg-6">
-                    <AboutImage src="/assets/img/hero_bg.jpg" alt="SMAIT Ruhama" />
+                    <AboutImage src="/assets/img/gedung.png" alt="SMAIT Ruhama" />
                  </div>
                  <div className="col-lg-6">
                     <TextContent>
-                       <h2>Visi & Misi Kami</h2>
-                       <p>
-                          Menjadi lembaga pendidikan Islam terpadu yang unggul dalam melahirkan generasi yang memiliki kedalaman spiritual, keluhuran akhlak, dan kemapanan intelektual.
+                       <h2 className="fw-bold mb-3">Visi</h2>
+                       <p className="mb-4">
+                          Sekolah unggul yang menyiapkan pemimpin masa depan berjiwa wirausaha, berprestasi, berwawasan global. dan berkarakter Qur’an
                        </p>
-                       <h5 className="fw-bold mb-3">Misi Kami:</h5>
-                       <ListWrapper>
-                          <li>Menyelenggarakan pendidikan berbasis karakter Islami.</li>
-                          <li>Mengembangkan potensi akademik dan non-akademik siswa secara optimal.</li>
-                          <li>Mewujudkan lingkungan belajar yang kondusif, kreatif, dan inovatif.</li>
-                          <li>Membangun kemitraan yang kuat dengan orang tua dan masyarakat.</li>
-                       </ListWrapper>
+                       <h2 className="fw-bold mb-3">Misi</h2>
+                       <OrderedListWrapper>
+                          <li>Menciptakan lingkungan belajar yang menumbuhkan rasa cinta, mengamalkan, dan mampu mendakwahakan Al-Qur’an.</li>
+                          <li>Memfasilitasi pembentukan mental dan pola pikir, serta pengembangan pengetahuan dan keterampilan kewirausahaan pada siswa.</li>
+                          <li>Mewujudkan lingkungan belajar yang ramah terhadap perbedaan cara pandang, berfikir, dan bersikap terhadap isu Global.</li>
+                          <li>Menyelenggarakan aktivitas belajar yang dapat menumbuhkan kepedulian dan tanggung jawab terhadap isu Global.</li>
+                          <li>Memfasilitasi berkembangnya keterampilan berbahasa internasional dan penguasaan teknologi informasi.</li>
+                          <li>Menerapkan tata kelola kurikulum dan pembelajaran yang modern untuk membangun sikap dan keterampilan belajar guna mendukung pencapaian prestasi dan potensi kepemimpinan yang optimal.</li>
+                       </OrderedListWrapper>
                     </TextContent>
                  </div>
                </div>

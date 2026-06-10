@@ -73,6 +73,9 @@ const DetailPrestasi = () => {
                         <DetailContent>
                             <BadgeWrapper>
                                 <span className="badge px-3 py-2 rounded-pill" style={{ backgroundColor: '#f97316', color: 'white' }}>{item.achievement_level || 'PRESTASI'}</span>
+                                <span className="badge px-3 py-2 rounded-pill text-capitalize" style={{ backgroundColor: item.type === 'kelompok' ? '#0ea5e9' : '#64748b', color: 'white' }}>
+                                    {item.type || 'individu'}
+                                </span>
                                 <span className="badge bg-light text-dark px-3 py-2 rounded-pill border">
                                     <i className="bi bi-person-fill me-2 text-primary"></i>
                                     {item.student_name}

@@ -70,6 +70,18 @@ export const ListWrapper = styled.ul`
   }
 `;
 
+export const OrderedListWrapper = styled.ol`
+  color: #64748b;
+  padding-left: 1.2rem;
+
+  li {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    font-size: 1.05rem;
+    padding-left: 0.25rem;
+  }
+`;
+
 export const ContactSection = styled.section`
   padding: 80px 0;
   background: rgba(39, 34, 125, 0.03);

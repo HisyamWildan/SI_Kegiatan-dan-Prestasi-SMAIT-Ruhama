@@ -64,12 +64,12 @@ export const SectionTitle = styled.div`
 export const Section = styled.section`
   padding: 80px 0;
   position: relative;
-  background: ${({ $dark }) => $dark ? 'linear-gradient(135deg, #1e3a8a 0%, #164e63 50%, #134e4a 100%)' : 'transparent'};
-  color: ${({ $dark }) => $dark ? 'white' : 'inherit'};
+  background: ${({ $dark }) => $dark ? 'linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)' : 'transparent'};
+  color: ${({ $dark }) => $dark ? '#0f172a' : 'inherit'};
 
   ${SectionTitle} {
-     h2 { color: ${({ $dark }) => $dark ? 'white' : '#0f172a'}; }
-     p { color: ${({ $dark }) => $dark ? 'rgba(255, 255, 255, 0.8)' : '#64748b'}; }
+     h2 { color: #0f172a; }
+     p { color: #64748b; }
   }
 `;
 
@@ -254,12 +254,28 @@ export const GridContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 
+  ${({ $count }) => $count === 1 && `
+    grid-template-columns: 1fr;
+    max-width: 380px;
+    margin: 0 auto;
+  `}
+
+  ${({ $count }) => $count === 2 && `
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+    margin: 0 auto;
+  `}
+
   @media (max-width: 992px) {
     grid-template-columns: repeat(2, 1fr);
+    ${({ $count }) => $count === 1 && `
+      grid-template-columns: 1fr;
+    `}
   }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    max-width: 100%;
   }
 `;
 

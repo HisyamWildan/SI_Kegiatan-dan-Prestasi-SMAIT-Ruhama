@@ -37,9 +37,9 @@ function Footer() {
             <SectionTitle>Menu</SectionTitle>
             <LinkList>
               <li><Link to="/">Beranda</Link></li>
-              <li><Link to="#">Tentang</Link></li>
-              <li><Link to="#">Informasi</Link></li>
-              <li><Link to="/contact">Kontak</Link></li>
+              <li><a href="#about">Tentang Kami</a></li>
+              <li><a href="#kegiatan">Kegiatan</a></li>
+              <li><a href="#prestasi">Prestasi</a></li>
             </LinkList>
           </FooterCol>
 
@@ -47,9 +47,9 @@ function Footer() {
           <FooterCol className="col-lg-2 col-md-3">
             <SectionTitle>Informasi</SectionTitle>
             <LinkList>
-              <li><Link to="#">Kegiatan Sekolah</Link></li>
-              <li><Link to="#">Prestasi Siswa</Link></li>
-              <li><Link to="#">Pengumuman</Link></li>
+              <li><Link to="/kegiatan-sekolah">Kegiatan Sekolah</Link></li>
+              <li><Link to="/prestasi-siswa">Prestasi Siswa</Link></li>
+              <li><Link to="/login">Login Siswa</Link></li>
             </LinkList>
           </FooterCol>
 
@@ -57,10 +57,9 @@ function Footer() {
           <FooterCol className="col-lg-2 col-md-3">
             <SectionTitle>Bantuan</SectionTitle>
             <LinkList>
-              <li><Link to="#">FAQ</Link></li>
-              <li><Link to="#">Panduan Pengguna</Link></li>
-              <li><Link to="#">Kebijakan Privasi</Link></li>
-              <li><Link to="#">Dukungan</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
+              <li><Link to="/panduan">Panduan Pengguna</Link></li>
+              <li><Link to="/privasi">Kebijakan Privasi</Link></li>
             </LinkList>
           </FooterCol>
 

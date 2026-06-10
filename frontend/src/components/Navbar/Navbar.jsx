@@ -112,7 +112,7 @@ function Navbar() {
 
             {!userName ? (
               <NavItem>
-                <NavLink to="/login" style={{ backgroundColor: '#f97316', color: '#fff', borderRadius: '50px', padding: '8px 24px', fontWeight: '700' }}>Login / Daftar</NavLink>
+                <NavLink to="/login" style={{ backgroundColor: '#f97316', color: '#fff', borderRadius: '50px', padding: '8px 24px', fontWeight: '700' }}>Masuk/Daftar</NavLink>
               </NavItem>
             ) : (
               <Dropdown style={{ position: "relative" }}>

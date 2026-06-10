@@ -14,6 +14,7 @@ class Prestasi extends Model
 
     protected $fillable = [
         'title',
+        'type',
         'student_name',
         'class_name',
         'achievement_level',

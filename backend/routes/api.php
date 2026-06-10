@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:guru')->group(function () {
         Route::put('/prestasi/{id}/approve', [PrestasiController::class, 'approve']);
         Route::put('/prestasi/{id}/reject', [PrestasiController::class, 'reject']);
+        Route::put('/prestasi/{id}/revise', [PrestasiController::class, 'revise']);
         Route::put('/prestasi/{id}/pending', [PrestasiController::class, 'setPending']);
     });
 

@@ -59,6 +59,37 @@ const ManageCategories = () => {
         }
     };
 
+    if (show) {
+        return (
+            <div>
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h3 className="fw-bold m-0" style={{ color: '#1e293b' }}>{formData.id ? 'Edit Kategori' : 'Tambah Kategori'}</h3>
+                    <p className="text-muted m-0">Silakan isi detail kategori di bawah ini.</p>
+                </div>
+
+                <div className="bg-white rounded-3 shadow-sm p-4">
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label className="fw-semibold">Nama Kategori</Form.Label>
+                            <Form.Control type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                        </Form.Group>
+                        <Form.Group className="mb-4">
+                            <Form.Label className="fw-semibold">Tipe</Form.Label>
+                            <Form.Select required value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                                <option value="kegiatan">Kegiatan</option>
+                                <option value="prestasi">Prestasi</option>
+                            </Form.Select>
+                        </Form.Group>
+                        <div className="d-flex justify-content-end gap-2">
+                            <Button variant="secondary" onClick={handleClose}>Batal</Button>
+                            <Button variant="primary" type="submit" style={{ backgroundColor: '#f97316', border: 'none', borderRadius: '8px' }}>Simpan</Button>
+                        </div>
+                    </Form>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -91,31 +122,6 @@ const ManageCategories = () => {
                     </tbody>
                 </Table>
             </div>
-
-            <Modal show={show} onHide={handleClose}>
-                <Form onSubmit={handleSubmit}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{formData.id ? 'Edit Kategori' : 'Tambah Kategori'}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nama Kategori</Form.Label>
-                            <Form.Control type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Tipe</Form.Label>
-                            <Form.Select required value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
-                                <option value="kegiatan">Kegiatan</option>
-                                <option value="prestasi">Prestasi</option>
-                            </Form.Select>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>Batal</Button>
-                        <Button variant="primary" type="submit" style={{ backgroundColor: '#f97316', border: 'none' }}>Simpan</Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
         </div>
     );
 };

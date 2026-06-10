@@ -121,6 +121,11 @@ const PublicPrestasi = () => {
                       {renderImages(item)}
                     </div>
                     <div className="content-box">
+                      <div className="mb-2">
+                        <span className="badge text-capitalize px-2 py-1 rounded" style={{ backgroundColor: item.type === 'kelompok' ? '#0ea5e9' : '#64748b', fontSize: '0.7rem' }}>
+                          {item.type || 'individu'}
+                        </span>
+                      </div>
                       <h3 className="title">{item.title}</h3>
                       <p className="description"><strong>{item.student_name}</strong> - {item.description}</p>
                       <div className="footer">

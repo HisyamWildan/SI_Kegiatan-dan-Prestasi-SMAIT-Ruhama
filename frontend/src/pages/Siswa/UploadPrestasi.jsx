@@ -21,6 +21,7 @@ const UploadPrestasi = () => {
 
     const [formData, setFormData] = useState({
         title: '',
+        type: 'individu',
         student_name: user?.name || '',
         class_name: '',
         achievement_level: '',
@@ -131,29 +132,58 @@ const UploadPrestasi = () => {
                                     />
                                 </Form.Group>
                             </Col>
+                            <Col md={12} className="mb-3">
+                                <Form.Group>
+                                    <Form.Label className="fw-semibold">Tipe Prestasi <span className="text-danger">*</span></Form.Label>
+                                    <Form.Select 
+                                        required 
+                                        className="py-2 rounded-3"
+                                        value={formData.type} 
+                                        onChange={e => setFormData({...formData, type: e.target.value})}
+                                    >
+                                        <option value="individu">Individu (Perorangan)</option>
+                                        <option value="kelompok">Kelompok (Tim)</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
                             <Col md={6} className="mb-3">
                                 <Form.Group>
-                                    <Form.Label className="fw-semibold">Nama Lengkap <span className="text-danger">*</span></Form.Label>
+                                    <Form.Label className="fw-semibold">
+                                        {formData.type === 'kelompok' ? 'Nama Anggota Kelompok' : 'Nama Lengkap'} <span className="text-danger">*</span>
+                                    </Form.Label>
                                     <Form.Control 
                                         type="text" 
                                         required 
                                         className="py-2 rounded-3"
                                         value={formData.student_name} 
                                         onChange={e => setFormData({...formData, student_name: e.target.value})} 
+                                        placeholder={formData.type === 'kelompok' ? 'Nama-nama anggota (pisahkan dengan koma)' : 'Nama lengkap siswa'}
                                     />
+                                    {formData.type === 'kelompok' && (
+                                        <Form.Text className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            *Pisahkan dengan koma. Contoh: Hisyam, Ahmad, Budi
+                                        </Form.Text>
+                                    )}
                                 </Form.Group>
                             </Col>
                             <Col md={6} className="mb-3">
                                 <Form.Group>
-                                    <Form.Label className="fw-semibold">Kelas <span className="text-danger">*</span></Form.Label>
+                                    <Form.Label className="fw-semibold">
+                                        {formData.type === 'kelompok' ? 'Kelas Anggota' : 'Kelas'} <span className="text-danger">*</span>
+                                    </Form.Label>
                                     <Form.Control 
                                         type="text" 
                                         required
                                         className="py-2 rounded-3"
                                         value={formData.class_name} 
                                         onChange={e => setFormData({...formData, class_name: e.target.value})} 
-                                        placeholder="Misal: XI MIPA 2" 
+                                        placeholder={formData.type === 'kelompok' ? 'Misal: XI MIPA 2, XI MIPA 1' : 'Misal: XI MIPA 2'} 
                                     />
+                                    {formData.type === 'kelompok' && (
+                                        <Form.Text className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            *Isi kelas semua anggota. Contoh: XI MIPA 2, XI MIPA 1
+                                        </Form.Text>
+                                    )}
                                 </Form.Group>
                             </Col>
                         </Row>

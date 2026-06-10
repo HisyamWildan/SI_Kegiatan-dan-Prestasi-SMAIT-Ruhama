@@ -1,11 +1,12 @@
 import { styled } from "styled-components";
 
 export const FooterWrapper = styled.footer`
-  background: linear-gradient(135deg, #f8fafc, #ffffff);
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   color: #334155;
   font-size: 14px;
   padding-top: 60px;
   padding-bottom: 20px;
+  border-top: 1px solid #fed7aa;
 `;
 
 export const FooterRow = styled.div``;
@@ -43,13 +44,30 @@ export const LinkList = styled.ul`
     margin: 8px 0;
 
     a {
-      color: #334155;
+      color: #475569;
       text-decoration: none;
-      transition: all 0.3s;
+      transition: all 0.2s ease-in-out;
+      display: inline-block;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: #ea580c;
+        transition: width 0.3s ease;
+      }
 
       &:hover {
-        color: #14532d;
-        padding-left: 4px;
+        color: #ea580c;
+        transform: translateX(5px);
+        
+        &::after {
+          width: 100%;
+        }
       }
     }
   }

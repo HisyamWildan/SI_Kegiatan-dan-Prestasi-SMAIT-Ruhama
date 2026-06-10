@@ -124,6 +124,30 @@ export const StyledInput = styled.input`
   }
 `;
 
+export const PasswordInputContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+export const EyeIcon = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 23px; /* Center relative to input height */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  z-index: 5;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #f97316;
+  }
+`;
+
 export const PrimaryButton = styled.button`
   width: 100%;
   padding: 1rem;

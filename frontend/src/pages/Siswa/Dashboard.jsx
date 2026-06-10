@@ -20,7 +20,8 @@ const SiswaDashboard = () => {
         total: 0,
         approved: 0,
         pending: 0,
-        rejected: 0
+        rejected: 0,
+        revised: 0
     });
     const user = JSON.parse(localStorage.getItem('user'));
 
@@ -34,7 +35,8 @@ const SiswaDashboard = () => {
                     total: myPrestasi.length,
                     approved: myPrestasi.filter(p => p.status === 'approved').length,
                     pending: myPrestasi.filter(p => p.status === 'pending').length,
-                    rejected: myPrestasi.filter(p => p.status === 'rejected').length
+                    rejected: myPrestasi.filter(p => p.status === 'rejected').length,
+                    revised: myPrestasi.filter(p => p.status === 'revised').length
                 });
             } catch (error) {
                 console.error('Failed to fetch stats', error);
@@ -67,6 +69,14 @@ const SiswaDashboard = () => {
             icon: 'bi-clock-history', 
             color: '#f97316', 
             bg: '#fff7ed',
+            path: '/dashboardsiswa/riwayat'
+        },
+        { 
+            label: 'Perlu Revisi', 
+            value: `${stats.revised} Laporan`, 
+            icon: 'bi-pencil-square', 
+            color: '#f59e0b', 
+            bg: '#fffbeb',
             path: '/dashboardsiswa/riwayat'
         },
         { 
