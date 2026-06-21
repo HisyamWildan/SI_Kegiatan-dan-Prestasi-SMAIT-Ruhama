@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Modal, Button, Form, Row, Col, Badge, Alert } from 'react-bootstrap';
-import api from '../../services/api';
+import api, { API_BASE_URL } from '../../services/api';
 import styled from 'styled-components';
 
 import { 
@@ -218,7 +218,7 @@ const RiwayatPrestasi = () => {
                                                 </>
                                             ) : (formData.old_image ? (
                                                 <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_image}`} alt="O1" />
+                                                    <img src={`${API_BASE_URL}/storage/${formData.old_image}`} alt="O1" />
                                                     <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image')}><i className="bi bi-x"></i></RemoveButton>
                                                 </>
                                             ) : <i className="bi bi-image"></i>)}
@@ -234,7 +234,7 @@ const RiwayatPrestasi = () => {
                                                 </>
                                             ) : (formData.old_image2 ? (
                                                 <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_image2}`} alt="O2" />
+                                                    <img src={`${API_BASE_URL}/storage/${formData.old_image2}`} alt="O2" />
                                                     <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image2')}><i className="bi bi-x"></i></RemoveButton>
                                                 </>
                                             ) : <i className="bi bi-image"></i>)}
@@ -250,7 +250,7 @@ const RiwayatPrestasi = () => {
                                                 </>
                                             ) : (formData.old_image3 ? (
                                                 <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_image3}`} alt="O3" />
+                                                    <img src={`${API_BASE_URL}/storage/${formData.old_image3}`} alt="O3" />
                                                     <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_image3')}><i className="bi bi-x"></i></RemoveButton>
                                                 </>
                                             ) : <i className="bi bi-image"></i>)}
@@ -270,7 +270,7 @@ const RiwayatPrestasi = () => {
                                                 </>
                                             ) : (formData.old_certificate ? (
                                                 <>
-                                                    <img src={`http://localhost:8000/storage/${formData.old_certificate}`} alt="OC" />
+                                                    <img src={`${API_BASE_URL}/storage/${formData.old_certificate}`} alt="OC" />
                                                     <RemoveButton type="button" onClick={() => handleRemoveOldImage('old_certificate')}><i className="bi bi-x"></i></RemoveButton>
                                                 </>
                                             ) : <i className="bi bi-file-earmark-check"></i>)}

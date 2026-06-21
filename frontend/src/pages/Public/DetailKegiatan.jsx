@@ -4,7 +4,7 @@ import { Spinner, Breadcrumb, Carousel } from 'react-bootstrap';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Container from '../../components/ui/Container';
-import api from '../../services/api';
+import api, { API_BASE_URL } from '../../services/api';
 import { DetailImageWrapper, DetailHeader, DetailCard, DetailContent, BadgeWrapper, DetailTitle, DescriptionText } from './DetailKegiatan.styled';
 
 const DetailKegiatan = () => {
@@ -46,12 +46,12 @@ const DetailKegiatan = () => {
                         {images.length > 0 && (
                             <DetailImageWrapper>
                                 {images.length === 1 ? (
-                                    <img src={`http://localhost:8000/storage/${images[0]}`} alt={item.title} />
+                                    <img src={`${API_BASE_URL}/storage/${images[0]}`} alt={item.title} />
                                 ) : (
                                     <Carousel interval={3000} fade>
                                         {images.map((img, idx) => (
                                             <Carousel.Item key={idx}>
-                                                <img src={`http://localhost:8000/storage/${img}`} alt={`${item.title} ${idx + 1}`} />
+                                                <img src={`${API_BASE_URL}/storage/${img}`} alt={`${item.title} ${idx + 1}`} />
                                             </Carousel.Item>
                                         ))}
                                     </Carousel>

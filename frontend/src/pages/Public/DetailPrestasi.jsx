@@ -4,7 +4,7 @@ import { Spinner, Breadcrumb, Carousel } from 'react-bootstrap';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Container from '../../components/ui/Container';
-import api from '../../services/api';
+import api, { API_BASE_URL } from '../../services/api';
 import styled from 'styled-components';
 
 import { StyledCarousel, DetailHeader, DetailCard, DetailContent, BadgeWrapper, DetailTitle, InfoBox, DescriptionText } from './DetailPrestasi.styled';
@@ -51,7 +51,7 @@ const DetailPrestasi = () => {
                                     <div className="p-3">
                                         {docImages.length === 1 ? (
                                             <img 
-                                                src={`http://localhost:8000/storage/${docImages[0]}`} 
+                                                src={`${API_BASE_URL}/storage/${docImages[0]}`} 
                                                 alt={item.title} 
                                                 className="w-100 rounded-3 shadow-sm" 
                                                 style={{ height: '500px', objectFit: 'cover' }}
@@ -60,7 +60,7 @@ const DetailPrestasi = () => {
                                             <StyledCarousel interval={3000} fade controls={true} style={{ height: '500px' }}>
                                                 {docImages.map((img, idx) => (
                                                     <Carousel.Item key={idx}>
-                                                        <img src={`http://localhost:8000/storage/${img}`} alt={`${item.title} ${idx + 1}`} style={{ height: '500px' }} />
+                                                        <img src={`${API_BASE_URL}/storage/${img}`} alt={`${item.title} ${idx + 1}`} style={{ height: '500px' }} />
                                                     </Carousel.Item>
                                                 ))}
                                             </StyledCarousel>

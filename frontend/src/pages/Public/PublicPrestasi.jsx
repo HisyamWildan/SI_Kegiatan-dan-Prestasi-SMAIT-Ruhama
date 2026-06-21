@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Container from "../../components/ui/Container";
-import api from "../../services/api";
+import api, { API_BASE_URL } from "../../services/api";
 import { NewsCardWrapper, LandingWrapper } from "./LandingPage.styled";
 import { StyledCarousel, HeaderBanner, FilterWrapper, PageSection, EmptyState } from "./PublicPrestasi.styled";
 
@@ -40,7 +40,7 @@ const PublicPrestasi = () => {
     const images = [item.image, item.image2, item.image3].filter(img => img !== null);
     
     if (images.length <= 1) {
-      return <img src={item.image ? `http://localhost:8000/storage/${item.image}` : "assets/img/placeholder.jpg"} alt={item.title} />;
+      return <img src={item.image ? `${API_BASE_URL}/storage/${item.image}` : "assets/img/placeholder.jpg"} alt={item.title} />;
     }
 
     return (
@@ -48,7 +48,7 @@ const PublicPrestasi = () => {
         {images.map((img, idx) => (
           <Carousel.Item key={idx}>
             <img 
-              src={`http://localhost:8000/storage/${img}`} 
+              src={`${API_BASE_URL}/storage/${img}`} 
               alt={`${item.title} ${idx + 1}`} 
               className="d-block w-100 h-100" 
               style={{ objectFit: 'cover' }}

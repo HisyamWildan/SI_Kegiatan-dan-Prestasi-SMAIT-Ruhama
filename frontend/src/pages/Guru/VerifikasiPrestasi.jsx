@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Badge, Row, Col, Form, Carousel, Card } from 'react-bootstrap';
-import api from '../../services/api';
+import api, { API_BASE_URL } from '../../services/api';
 import { 
     StyledTable, 
     OrangeBadge, 
@@ -139,7 +139,7 @@ const VerifikasiPrestasi = () => {
                                                     {[selectedItem.image, selectedItem.image2, selectedItem.image3].filter(img => img).map((img, idx) => (
                                                         <Carousel.Item key={idx}>
                                                             <img 
-                                                                src={`http://localhost:8000/storage/${img}`} 
+                                                                src={`${API_BASE_URL}/storage/${img}`} 
                                                                 alt={`Dokumentasi ${idx + 1}`} 
                                                                 className="w-100 rounded-3 img-fit" 
                                                             />
@@ -155,7 +155,7 @@ const VerifikasiPrestasi = () => {
                                         <DetailLabel>Bukti Prestasi / Lomba</DetailLabel>
                                         <div className="rounded-4 overflow-hidden shadow-sm border bg-white p-2 text-center">
                                             {selectedItem.certificate ? (
-                                                <img src={`http://localhost:8000/storage/${selectedItem.certificate}`} alt="Bukti" className="w-100 rounded-3 img-fit" />
+                                                <img src={`${API_BASE_URL}/storage/${selectedItem.certificate}`} alt="Bukti" className="w-100 rounded-3 img-fit" />
                                             ) : (
                                                 <div className="bg-light text-center py-4 text-muted small">Tidak ada foto bukti</div>
                                             )}
