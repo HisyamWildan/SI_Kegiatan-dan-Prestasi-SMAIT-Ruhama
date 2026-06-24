@@ -49,9 +49,12 @@ const RiwayatPrestasi = () => {
                 api.get('/prestasi'),
                 api.get('/categories?type=prestasi')
             ]);
+            console.log("Logged in user:", user);
+            console.log("All prestasi from API:", resPrestasi.data.data);
             const myPrestasi = resPrestasi.data.data
                 .filter(p => Number(p.users_id) === Number(user?.id))
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            console.log("Filtered prestasi for this student:", myPrestasi);
             setPrestasi(myPrestasi);
             setCategories(resCat.data.data);
         } catch (error) {

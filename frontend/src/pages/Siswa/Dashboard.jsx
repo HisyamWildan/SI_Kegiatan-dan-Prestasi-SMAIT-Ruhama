@@ -29,7 +29,10 @@ const SiswaDashboard = () => {
         const fetchStats = async () => {
             try {
                 const res = await api.get('/prestasi');
+                console.log("Dashboard - Logged in user:", user);
+                console.log("Dashboard - All prestasi from API:", res.data.data);
                 const myPrestasi = res.data.data.filter(p => Number(p.users_id) === Number(user?.id));
+                console.log("Dashboard - Filtered prestasi for this student:", myPrestasi);
                 
                 setStats({
                     total: myPrestasi.length,
