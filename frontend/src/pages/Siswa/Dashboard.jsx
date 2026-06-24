@@ -29,7 +29,7 @@ const SiswaDashboard = () => {
         const fetchStats = async () => {
             try {
                 const res = await api.get('/prestasi');
-                const myPrestasi = res.data.data.filter(p => p.users_id === user?.id);
+                const myPrestasi = res.data.data.filter(p => Number(p.users_id) === Number(user?.id));
                 
                 setStats({
                     total: myPrestasi.length,

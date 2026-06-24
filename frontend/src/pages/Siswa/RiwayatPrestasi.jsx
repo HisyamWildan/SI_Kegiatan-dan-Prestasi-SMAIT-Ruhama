@@ -50,7 +50,7 @@ const RiwayatPrestasi = () => {
                 api.get('/categories?type=prestasi')
             ]);
             const myPrestasi = resPrestasi.data.data
-                .filter(p => p.users_id === user?.id)
+                .filter(p => Number(p.users_id) === Number(user?.id))
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setPrestasi(myPrestasi);
             setCategories(resCat.data.data);
